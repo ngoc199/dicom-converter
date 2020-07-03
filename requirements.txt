@@ -1,0 +1,8 @@
+flask
+numpy
+pydicom
+opencv-python
+csv
+matplotlib
+os
+gunicorn
