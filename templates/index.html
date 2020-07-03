@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chuyển ảnh DICOM sang PNG</title>
+  </head>
+  <body>
+    <!-- Title -->
+    <h1>Chuyển đổi DICOM sang PNG</h1>
+
+    <!-- Status -->
+    <h3>
+      {% if success %} Chuyển đổi thành công! {% else %} Vui lòng chọn ảnh {%
+      endif %}
+    </h3>
+
+    <!-- Error message -->
+    {% for message in get_flashed_messages() %}
+    <span class="danger" style="color: red; font-weight: bold;"
+      >{{message}}</span
+    >
+    {% endfor %}
+
+    <!-- Upload form -->
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" />
+      <button type="submit">Chuyển đổi</button>
+    </form>
+
+    <!-- Show result -->
+    {% if success %}
+    <h3>Ảnh sau chuyển đổi</h3>
+    <img src="{{ url_for('static', filename=filename) }}" alt="" />
+    <a href="/download/{{filename}}">Tải xuống</a>
+    <h3>Thông tin trong ảnh</h3>
+    <table style="border: 1px solid #333; border-collapse: collapse;">
+      {% for col in range(data[0]|length) %}
+      <tr>
+        {% for row in range(data|length) %}
+        <td style="border: 1px solid #333;">{{data[row][col]}}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </body>
+</html>
