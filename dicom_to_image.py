@@ -21,7 +21,7 @@ def convertImage(filepath, filename):
     # read the input dicom image
     ds = dicom.dcmread(filepath)
 
-    # print(ds.data_element)
+    # get image data
     pixel_array_numpy = ds.pixel_array
 
     # convert to float to avoid overflow or underflow losses
