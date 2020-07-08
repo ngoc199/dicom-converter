@@ -5,15 +5,18 @@ import cv2
 import csv
 
 
-def convertImage(filepath):
-    def createImageFile(filename):
-        '''
-        Create new file in the same directory with the given file name
-        '''
-        filename = filename + ".png"
-        f = open(filename, "w+")
-        f.close()
-        return "./static/" + filename
+def createImageFile(filename):
+    '''
+    Create new file in the same directory with the given file name
+    '''
+    filename = filename + ".png"
+    path = './static/'+filename
+    f = open(path, "w+")
+    f.close()
+    return path
+
+
+def convertImage(filepath, filename):
 
     # read the input dicom image
     ds = dicom.dcmread(filepath)
@@ -24,28 +27,17 @@ def convertImage(filepath):
     # convert to float to avoid overflow or underflow losses
     image_2d = pixel_array_numpy.astype(float)
 
-    # rescaling to gray image
-    image_2d_gray = (np.maximum(image_2d, 0) / image_2d.max()) * 255.0
-
     # convert to uint8
-    image_2d_gray = np.uint8(image_2d_gray)
+    image_2d_gray = np.uint8(image_2d)
 
     # create output image file
-    dest = createImageFile('result')
+    dest = createImageFile(filename)
 
     # write image to output file
     cv2.imwrite(dest, image_2d_gray)
 
     # read the image from the output file
     image = cv2.imread(dest)
-
-    # show the original image & output image
-    # plt.figure()
-    # plt.subplot(1, 2, 1)
-    # plt.imshow(pixel_array_numpy, cmap='gray')
-    # plt.subplot(1, 2, 2)
-    # plt.imshow(image)
-    # plt.show()
 
     # Extract information to csv file
     with open('Patient_Detail.csv', 'w', newline='') as csvfile:
